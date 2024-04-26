@@ -6,9 +6,9 @@
 ### Middleware(미들웨어)  
 - Application과 운영체제 중간 다리 역할
   
-    운영체제의 신호를 App이 가져갈 수 있는 API
+    - 운영체제의 신호를 App이 가져갈 수 있는 API
   
-    App Level에서 운영체제에게 신호를 전달하는 API
+    - App Level에서 운영체제에게 신호를 전달하는 API
   
 ![image](https://github.com/kghees/Embedded_C/assets/92205960/e5cec51b-306c-42c0-85d9-d715ae2d8637)
 
@@ -71,4 +71,113 @@ int main(){
 		printf("%c ",p[i]); //문자 하나씩 출력 A B C
 	return 0;
 }
+```
+### 진수 변환  
+- 진수 변환은 임베디드 장치로부터 나온 Data를 분석하는 과정이다.
+#### strrol()  
+```c
+long strrol(char const* str, char** endptr, int base)
+문자열에서 숫자를 추출하는 함수
+str : 문자열
+endptr : 문자열 끝 포인터
+base : 변환 될 문자열의 진수(2,8,16,10)
+return : 성공 ->변환된 정수, 실패 -> 0
+int main(){
+	char inputH[10]= "0xFF";
+	char inputB[10]= "1010";
+	char inputO[10]= "52";
+	char inputD[10]= "123";
+
+	int result16 = strtol(inputH,NULL,16);
+	int result2 = strtol(inputB,NULL,2);
+	int result8 = strtol(inputO,NULL,8);
+	int result10 = strtol(inputD,NULL,10);
+
+	printf("%d\n", result16); //255
+	printf("%d\n", result2); //10
+	printf("%d\n", result8); //42
+	printf("%d\n", result10); //123
+
+	return 0;
+}
+```
+#### sprintf()  
+```c
+int sprintf(char *str, const char* format, ...)
+문자열에 지정한 형식으로 담는다.
+문자열 끝에 '\0'이 자동으로 추가된다.
+str : 변환된 문자열을 담을 버퍼
+format : string 문자 서식
+return : 성공 ->byte 수, 실패 -> -1
+int main() {
+
+	int a = 100;
+	char buf[10] = { 0 };
+
+	sprintf(buf, "%d", a);
+	printf("%s", buf);
+
+	return 0;
+}
+```
+### 비트연산  
+- & 연산(and)
+  - 값을 추출할 때 사용, 값에 "1"을 적은 곳만 추출한다.
+- | 연산(or)
+  - 2진수 덧셈시에 사용, 둘 중 한 곳에 "1"이 있으면, 결과는 "1"이다.
+- ^ 연산(XOR)
+  - 같으면 0, 다르면 1, 암호화에 사용된다.
+- Shift 연산자
+  - 비트 단위로 이동한다.
+  - Left Shift : "<<" 값을 왼쪽으로 밀어서 숫자를 추가해준다.
+  - Right Shift : ">>" 값을 오른쪽으로 밀어서 숫자를 없앤다.
+- ~ 연산(not)
+  - 비트가 반대가 된다. "기준 비투 수"에 따라 결과 값이 달라질 수 있다.
+
+#### char과 unsigned char의 차이  
+**char**  
+- MSB를 부호로 사용한다.
+- 나머지 7bit를 수를 저장하는 용도로 사용한다.
+- 저장할 수 있는 수 : -128 ~ 127
+
+**unsigned char**  
+- 부호는 없다.
+- 8bit 모두 수를 저장하는 용도로 사용한다.
+- 0 ~ 255까지 저장 가능
+
+```
+2번 bit에서 1개 bit 추출하여 변수 b에 저장하기
+b = (a >> 2) & 0x01;
+5번 bit에서 1개 bit 추출하여 변수 b에 저장하기
+b = (a >> 5) & 0x01;
+6번 bit에서 2개 bit 추출하여 변수 c에 저장하기
+c = (a >> 6) & 0b11; 
+```
+#### 비트 set/clear, 반전  
+
+**비트 clear**  
+- 특정 비트를 0으로 만드는 것을 clear 한다고 표현한다.
+**비트 set**
+- 특정 비트를 1로 만드는 것을 set한다라고 한다.
+**비트 반전**
+- XOR을 이용하여 반전
+```
+6번 bit에서 1개 bit set하여 변수 b에 저장하기
+b = (1 << 6) | a
+3번 bit에서 2개 bit set하여 변수 c에 저장하기
+c = (0b11 << 3) | a
+
+1번 bit에서 1개 bit clear하여 변수 b에 저장하기
+b = ~(1 << 1) & a
+3번 bit에서 2개 bit clear하여 변수 c에 저장하기
+c = ~(0x3 << 3) & a
+
+1번 bit에서 1개 bit 반전하여 변수 b에 저장
+b = a^(1<<1)
+변수 b에 다시 1번 bit를 1개 bit 반전하여 c에 저장
+c = b^(1<<1)
+5번 bit에서 3개 bit 반전하여 변수 d에 저장
+d = a^(0b111 << 5)
+변수 d에서 다시 한번 5번 bit에서 3개 bit 반전하여 변수 e에 저장
+e = d^(0x7 << 5)
 ```
