@@ -5,6 +5,7 @@
 
 ### Middleware(미들웨어)  
 - Application과 운영체제 중간 다리 역할
+  
     운영체제의 신호를 App이 가져갈 수 있는 API
   
     App Level에서 운영체제에게 신호를 전달하는 API
