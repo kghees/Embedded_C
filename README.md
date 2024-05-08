@@ -185,3 +185,27 @@ d = a^(0b111 << 5)
 변수 d에서 다시 한번 5번 bit에서 3개 bit 반전하여 변수 e에 저장
 e = d^(0x7 << 5)
 ```
+
+### 파싱(parsing)이란?  
+- 파싱(parsing)은 임베디드 업계에서 Visualization(시작화 = 차트화)을 하기위해 자주 사용된다.
+- **파싱을 어디에 사용할까?**
+  - H/W를 만들어내는 무수한 장비들은 로그데이터가 존재한다.(작동이 잘되고 있는지,에러가 발생했는지)
+  - Law Data를 파싱을 통해 가공하고, 가공된 데이터를 차트화 하는 업무를 수행
+
+### String Library  
+```
+strlen(arr) : 문자열(arr)의 길이를 반환한다.(널문자를 만날 때까지 진행한다.)
+strcpy(arr,brr) : 문자열을 복사한다. (arr에 brr 값 복사)
+strncpy(arr,brr,2) : 문자열을 n개 복사한다. (arr에 brr 값 2개 복사)
+strcat(arr,brr) : 문자열을 이어 붙인다. (arr에 brr 이어 붙이기)
+strncat(arr,brr,2) : 문자열을 n개 이어 붙인다. (arr에 brr 2개 이어 붙이기)
+strcmp(arr,brr) : 두 문자열을 비교한다. (arr,brr 비교) (같으면 0, 앞서면 -1, 뒤라면 1)
+strncmp(arr,brr,3) : 두 문자열을 n개 비교한다.
+sscanf(arr, "[%f]%s%d", &time, msg, &num) : 문자열에서 형식화된 데이터를 읽어온다.
+sprintf(arr, "[%.6f] %s %d", time, msg, num) : 형식화된 데이터를 문자열로 저장한다.
+atoi(arr) : 문자열을 정수로 변환한다.
+strtok(arr, "!") : 문자열을 지정된 구분자로 토근으로 분리한다. (Split)
+(구분자를 찾으면 NULL로 전환)
+strchr(arr, 'A') : 문자열에서 문자 찾기
+strstr(arr, "AB") : 문자열에서 문자열 찾기 (대소문자 구분)
+```
