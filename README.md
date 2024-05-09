@@ -222,3 +222,84 @@ strchr(arr, 'A') : 문자열에서 문자 찾기
 
 strstr(arr, "AB") : 문자열에서 문자열 찾기 (대소문자 구분)
 ```
+
+### 음수처리방법  
+#### 2의 보수 표헌법  
+- 현재 컴퓨터에서 가장 널리 사용되는 음수 표현 방법
+8bit의 숫자가 있다 ex) 0b 0000 0011
+먼저 1의 보수를 취한다.(비트 반전) ex) 0b 1111 1100
+1을 더한다. (2의 보수) ex) 0b 1111 1101
+- 2의 보수 특징 : 한번 더 2의 보수를 취하면 원래 값으로 돌아옴.
+
+#### 부호 비트 사용  
+- char 변수는 8bit를 사용, MSB(최상위 비트)를 부호 비트로 사용
+  - 음수일때는 MSB가 1이고, **나머지 7비트를 2의 보수를 취한 값**을 저장
+
+### Overflow / Underflowr 란?  
+- 두 용어 모두 데이터 타입이 표현할 수 있는 범위를 벗어날 때 쓰인다.
+  - 위로 벗어나면? -> Overflow
+  - 아래로 벗어나면? -> Underflow
+  - char 범위 : -128 ~ 127
+- Overflow / Underflow 발생 시 data가 깨지는 것이 아니라 돌고 있다.
+=> 출력될 수 있는 결과 값의 크기에 유의해서 data type을 설정하기!!
+
+#### Truncation이란?  
+- 주로 배열의 일부를 잘라내는 작업
+``` c
+#include <stdio.h>
+
+int main(){
+	char a = 0XAB;
+	short b = 0x1234;
+	a = b;
+	printf("0x%X",a); => 0x34만 출력된다.
+	return 0;
+}
+```
+=> 하위 bit만 들어가고 상위 bit들은 짤린다.  
+
+### 빅/리틀 엔디안  
+#### 엔디안이란?  
+- CPU가 메모리에 값을 저장할 때, 저장 순서
+- **주소는 바이트 단위로**, 어떤 순서로 기록할 것인지에 따라 두 가지가 존재 (빅엔디안, 리틀엔디안)
+##### 빅엔디안  
+- 사람이 읽기 편한 방식으로 저장(디버깅 편함)
+- 저장할 때 상위 바이트 즉, 큰쪽을 먼저 저장하는 것
+![image](https://github.com/kghees/Embedded_C/assets/92205960/c2cb4e12-7816-4cf3-8d23-eff432cd1764)
+##### 리틀엔디안  
+- 임베디드 장치가 선택한 방식
+- 저장할 때 하위 바이트 즉, 작은 쪽을 먼저 저장하는 것
+![image](https://github.com/kghees/Embedded_C/assets/92205960/d9cfb55d-e78b-497d-b2fc-314f631c15a3)
+
+### Memory Mapped I/O  
+- 메모리 지도에 실제 메모리가 맵핑 되어있는 것
+- 마이크로프로세서(CPU)가 입출력 장치를 액세스할 때, 입출력과 메모리의 주소 공간을 분리하지 않고
+  하나의 메모리 공간에 취급하여 배치하는 방식
+- SW개발자들은 GPIO 레지스터의 첫 번째 주소에 값을 적으려면
+  0x0F12가 아닌, 0x1F12 0000 ~ 0x1F00 FFFF에 값을 적는다.
+- memory map을 보고 해당 주소에 값을 read/write 한다!
+- 매핑 되지 않은 빈 공간은 Reserved 이다.
+
+### 고정길이 정수  
+- Fixed-width integer 사용
+- **시스템 마다 동일한 사이즈의 변수 사용을 위해서 고정 길이 변수를 사용한다.**
+```
+#include <stdint.h> 후 사용 가능
+
+• int8_t : char
+
+• int16_t : short
+
+• int32_t : int  
+
+• int64_t : long long  
+
+• uint8_t : unsigned char
+
+• uint16_t : unsigned short
+
+• uint32_t : unsigned int
+
+• uint64_t : unsigned long long
+
+``` 
