@@ -405,3 +405,78 @@ int main(){
 	return 0;
 }
 ```
+#### Padding      
+구조체 내부에 변수가 있는데 구조체의 크기는??!!
+```
+#include<stdio.h>
+#include<string.h>
+
+int main() {
+	struct Node {
+		int a; 
+		char b;
+	}c;
+
+	printf("%d\n", sizeof(c));
+	return 0;
+}
+```
+int - 4byte + char - 1byte = 5가 아니라 8byte이다!!!  
+- CPU는 4 byte단위로 데이터를 읽는다.
+- b의 시작주소에 따라 CPU는 두 번 읽어야 한다.
+=> Padding을 사용해서 맞춰서 해결해 주면 된다!
+![image](https://github.com/kghees/Embedded_C/assets/92205960/c04f22b5-2ac3-42bb-a750-564150242aeb)
+#### pragma  
+- #pragma pack(1) : 해당 코드 밑으로 모든 구조체들은 패딩을 사용하지 않는다.
+- #pragma pack(4) : 다시 패딩을 사용한다.
+- **바이트 / 비트 단위 파싱을 할 때** 패딩을 고려하지 않기 위해 꼭 #pragma pack(1)을 사용한다.
+
+#### 비트필드  
+- 멤버 변수의 특정 bit만 사용하는 데이터 형식
+```c
+#include<stdio.h>
+#include<stdint.h>
+
+#pragma pack(1)
+struct ABC {
+	uint8_t a : 1; // uint8_t 중에서 1비트만 사용
+	uint8_t b : 5; // uint8_t 중에서 5비트만 사용
+	uint8_t c : 2; // uint8_t 중에서 2비트만 사용
+	//도합 1byte
+};
+int main() {
+
+	struct ABC X;
+
+	printf("%d", sizeof(struct ABC)); // 1
+
+	return 0;
+}
+```
+```c
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdint.h>
+
+#pragma pack(1)
+int main() {
+	struct Node {
+		uint8_t a : 3;
+		uint8_t b : 3;
+		uint8_t c : 2;
+	};
+
+	struct Node k = { 0x3, 0x6, 0x1 };
+
+	printf("%X\n", k.a);
+	printf("%X\n", k.b);
+	printf("%X\n", k.c);
+	return 0;
+}
+```
+![image](https://github.com/kghees/Embedded_C/assets/92205960/75de725d-6d4b-47af-b839-3512a9189313)  
+- **[큰 bit번호 : 작은 bit 번호]**
+- **Bit는 반대!!!!!!**
+
+
