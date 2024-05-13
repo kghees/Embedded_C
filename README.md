@@ -302,4 +302,106 @@ int main(){
 
 • uint64_t : unsigned long long
 
-``` 
+```
+### 구조체  
+#### Struct  
+- 기본 타입들을 모아 새로운 타입을 만드는 문법
+- 여러 타입들을 한 데 묶을 수 있다.
+```c
+#include <stdio.h>
+struct ABC { //구조체 이름
+    int a; //멤버변수1
+    int b; //멤버변수2
+};
+
+
+int main(int argc, char* argv[]) {
+    struct ABC geonhee; //구조체 변수
+
+    geonhee.a = 10;
+    geonhee.b = 20;
+    printf("%d %d", geonhee.a, geonhee.b);
+
+    return 0;
+}
+```
+![image](https://github.com/kghees/Embedded_C/assets/92205960/ca38d1df-a8a8-4ca9-80af-1b84fb173930)  
+#### 구조체 변수 만드는 방법  
+```c
+#include <stdio.h>
+struct ABC { 
+    int a; 
+    int b;
+} x1, x2;
+
+//타입을 만들자 마자 변수를 만들 수 있다.
+int main(int argc, char* argv[]) {
+    x1.a = 10;
+    x1.b = 20;
+
+    x2.a = 30;
+    x2.b = 40;
+    printf("%d %d %d %d", x1.a, x1.b, x2.a, x2.b);
+    return 0;
+}
+```
+![image](https://github.com/kghees/Embedded_C/assets/92205960/c7d0e82b-4fa0-4e71-b6fd-d50e98e3cd90)  
+#### 구조체 안에 있는 구조체  
+```c
+#include <stdio.h>
+struct ABC {
+    int a;
+
+    struct { //구조체 이름은 필요하지 않기 때문에 생략
+        int b1;
+        int b2;
+    } b;
+
+    int c;
+};
+```
+
+#### typedef  
+- 기존 타입을, 원하는 이름으로 정의(definition)하는 방법
+```c
+#include <stdio.h>
+struct ABC {
+    int a;
+    int b;
+};
+//구조체 ABC를 typedef로 geonhee로 재정의
+typedef struct ABC geonhee;
+
+//타입을 만들자 마자 변수를 만들 수 있다.
+int main(int argc, char* argv[]) {
+    //새로운 이름 geonhee로 gh라는 구조체 변수 생성 후 초기화
+    geonhee gh = { 10,20 };
+
+    printf("%d %d", gh.a, gh.b); // 10,20
+
+    return 0;
+}
+```
+#### union  
+- 생긴건 구조체와 비슷하지만, 다르다!!
+  - 멤버끼리 값을 공유하는 특징이 있다.
+- Union을 쓰는 이유
+  - Union과 Struct를 섞어서 쓰면, **바이트 단위로, 자유 자재로 파싱**이 가능하다.
+  - Union과 Struct를 섞어서 쓰면, **비트 단위로, 자유 자재로 파싱**이 가능하다.
+  - **리틀 엔디안에 주의한다!!**
+```c
+#include<stdio.h>
+#include<stdint.h>
+
+typedef union _ABC_{
+	int a;
+	char b;
+}ho;
+
+int main(){
+
+	ho x = {.a = 0x12345678};
+
+	return 0;
+}
+```
